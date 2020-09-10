@@ -1,18 +1,27 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from stock.enums import IndicadorInscricaoEstaual
-from shared.address import estado_model_choices, cidade_model_choices
 
 
-class Categoria(models.Model):
+class DefaultModel(models.Model):
+    nome = models.CharField()
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return self.nome
+
+
+class Categoria(DefaultModel):
     nome = models.CharField(max_length=32)
 
 
-class UnidadeDeMedida(models.Model):
+class UnidadeDeMedida(DefaultModel):
     nome = models.CharField(max_length=4)
 
 
-class Produto(models.Model):
+class Produto(DefaultModel):
     nome = models.CharField(max_length=64)
     categoria = models.ForeignKey(Categoria, on_delete=models.PROTECT, null=True, blank=True)
     unidade_medida = models.ForeignKey(UnidadeDeMedida, on_delete=models.PROTECT, null=True, blank=True)
@@ -21,10 +30,10 @@ class Produto(models.Model):
     ean_gtin = models.IntegerField(null=True, blank=True)
     ncm = models.IntegerField(null=True, blank=True)
     produzido = models.BooleanField()
-    observacoes = models.CharField(max_length=256)
+    observacoes = models.CharField(max_length=256, null=True, blank=True)
 
 
-class Contato(models.Model):
+class Contato(DefaultModel):
     nome = models.CharField(max_length=64)
     nome_fantasia = models.CharField(max_length=64, null=True, blank=True)
     cpf_cnpj = models.IntegerField(null=True, blank=True)
