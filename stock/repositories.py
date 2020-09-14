@@ -1,7 +1,6 @@
 from stock.models import Produto, Contato
 from abc import ABC
 
-
 class Repository(ABC):
     model = Produto
 
